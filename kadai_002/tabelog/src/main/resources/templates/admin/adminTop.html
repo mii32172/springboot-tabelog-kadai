@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>管理者トップページ</title>
+	</head>
+	<body>
+		<div class="samuraitabelog-wrapper">
+			<div th:replace="~{fragment :: header}"></div>
+			
+			<main>
+				<div class="container pt-4 pb-5 samuraitabelog-container">
+					<div class="row jusitify-content-center">
+						<div class="col-xxl-9 col-xl-10 col-lg-11">
+							
+							<h1 class="mb-4 text-center">管理者トップページ</h1>
+							
+							<div class="auth-category text-center">
+								<a class="mb-3 d-block" th:href="@{/admin/restaurants}">店舗一覧</a>
+								
+								<a class="mb-3 d-block" th:href="@{/admin/users}">会員一覧</a>
+								
+								<a class="mb-3 d-block" th:href="@{/admin/categories}">カテゴリ一覧</a>
+								
+								<a class="mb-3 d-block" th:href="@{/admin/reviews}">ユーザーレビュー一覧</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<div th:replace="~{fragment :: footer}"></div>
+		</div>
+		
+		<div th:replace="~{fragment :: scripts}"></div>
+	</body>
+</html>

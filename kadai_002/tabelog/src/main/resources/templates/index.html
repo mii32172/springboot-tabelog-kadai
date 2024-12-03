@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>ユーザートップページ</title>
+</head>
+
+<body>
+	<div class="samuraitabelog-wrapper">
+
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container samuraitabelog-container pb-5">
+
+				<div th:if="${param.loggedIn}" class="alert alert-info">
+					ログインしました。
+				</div>
+
+				<div th:if="${param.loggedOut}" class="alert alert-info">
+					ログアウトしました。
+				</div>
+
+				<div th:if="${successMessage}" class="alert alert-info">
+					<span th:text="${successMessage}"></span>
+				</div>
+
+				<div th:if="${errorMessage}" class="alert alert-info">
+					<span th:test="${errorMessage}"></span>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item active" aria-current="page"><a th:href="@{/}">トップページ</a></li>
+							</ol>
+						</nav>
+
+						<!-- 検索フォーム -->
+						<form method="get" th:action="@{/restaurant}" class="w-100 mb-3">
+							<div class="input-group">
+								<input type="text" class="form-control" name="keyword" th:value="${keyword}"
+									placeholder="店舗名・目的地">
+								<button type="submit" class="btn btn-primary">検索</button>
+							</div>
+						</form>
+
+						<!-- カテゴリ -->
+						<div class="card mb-3">
+							<h2 class="card-header text-center mb-3">カテゴリ</h2>
+							<div class="card-body">
+								<ul>
+									<li th:each="category : ${category}">
+										<a th:href="@{/restaurants/category/{id}(id=${category.getId()})}"
+											th:text="${category.getName()}"></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row col-md-7">
+						<!-- 新着店舗 -->
+						<h2 class="col-6 text-center mb-1 pt-5">新着店舗</h2>
+						<a class="col-6 pt-5 text-success text-left" th:href="@{/restaurants}">
+							店舗一覧へ
+						</a>
+						<div class="row row-cols-lg-3 row-cols-1 g-3 mb-5">
+							<div class="col" th:each="newRestaurant : ${newRestaurant}">
+								<a th:href="@{/restaurants/__${newRestaurant.getId()}__}"
+									class="link-dark samuraitabelog-card-link">
+									<div class="card h-100">
+										<img th:if="${newRestaurant.getImageName()}"
+											th:src="@{/storage/__${newRestaurant.getImageName()}__}"
+											class="card-img-top samuraitabelog-vertical-card-image" alt="店舗画像">
+										<img th:unless="${newRestaurant.getImageName()}" th:src="@{/images/noImage.png}"
+											class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">
+										<div class="card-body">
+											<h3 class="card-title" th:text="${newRestaurant.getName()}"></h3>
+											<p class="card-text mb-1">
+												<small class="text-muted"
+													th:text="${newRestaurant.getAddress()}"></small>
+											</p>
+											<p class="card-text">
+												<span
+													th:text="${#numbers.formatInteger(newRestaurant.getPrice(), 1, 'COMMA') + '円'}"></span>
+											</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+
+						<!-- お気に入り店舗 -->
+						<div class="row mb-5" sec:authorize="hasRole('ROLE_PAID')">
+							<h2 class="col-7 text-center mb-3">お気に入り店舗</h2>
+							<a class="col-5 boder-bottom" th:href="@{/favorite/}">お気に入り店舗一覧へ</a>
+							<div class="row row-cols-lg-3 row-cols-1 g-3 mb-5">
+								<div class="col" th:each="newFavorite : ${newFavorite}">
+									<a th:href="@{/restaurants/__${newFavorite.restaurant.getId()}__}"
+										class="link-dark samuraitabelog-card-link">
+										<div class="card h-100">
+											<img th:if="${newFavorite.restaurant.getImageName()}"
+												th:src="@{/storage/__${newFavorite.restaurant.getImageName()}__}"
+												class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">
+											<img th:unless="${newFavorite.restaurant.getImageName()}"
+												th:src="@{/images/noImage.png}"
+												class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">
+											<div class="card-body">
+												<h3 class="card-title" th:text="${newFavorite.restaurant.getName()}">
+												</h3>
+												<p class="card-text mb-1">
+													<small class="text-muted"
+														th:text="${newFavorite.restaurant.getAddress()}"></small>
+												</p>
+												<p class="card-text">
+													<span
+														th:text="${#numbers.formatInteger(newFavorite.restaurant.getPrice(), 1, 'COMMA') + '円'}"></span>
+												</p>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
+
+							<div th:if="${newFavorite.size() == 0}">
+								<p class="text-center">お気に入りの店舗はありません。</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- エリア -->
+					<div class="col-md-3">
+						<h2 class="text-center mb-3 pt-4">名古屋市エリア</h2>
+						<table class="table">
+							<tbody>
+								<tr>
+									<th>名古屋市</th>
+									<td class="link-list">
+										<a th:href="@{/restaurants?area=千種区}">千種区</a>
+										<a th:href="@{/restaurants?area=東区}">東区</a>
+										<a th:href="@{/restaurants?area=北区}">北区</a>
+										<a th:href="@{/restaurants?area=西区}">西区</a>
+										<a th:href="@{/restaurants?area=中村区}">中村区</a>
+										<a th:href="@{/restaurants?area=中区}">中区</a>
+										<a th:href="@{/restaurants?area=昭和区}">昭和区</a>
+										<a th:href="@{/restaurants?area=瑞穂区}">瑞穂区</a>
+										<a th:href="@{/restaurants?area=熱田区}">熱田区</a>
+										<a th:href="@{/restaurants?area=中川区}">中川区</a>
+										<a th:href="@{/restaurants?area=港区}">港区</a>
+										<a th:href="@{/restaurants?area=南区}">南区</a>
+										<a th:href="@{/restaurants?area=守山区}">守山区</a>
+										<a th:href="@{/restaurants?area=緑区}">緑区</a>
+										<a th:href="@{/restaurants?area=名東区}">名東区</a>
+										<a th:href="@{/restaurants?area=天白区}">天白区</a>
+
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+	<!-- Bootstrap -->
+	<div th:replace="~{fragment :: scripts}"></div>
+</body>
+
+</html>
