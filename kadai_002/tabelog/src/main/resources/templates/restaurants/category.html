@@ -41,10 +41,10 @@
 								<div class="card h-100">
 									<div class="row g-0">
 										<div class="col-md-4">
-											<img th:if="${restaurant.image}"
-												th:src="@{/storage/__${restaurant.image}__}"
+											<img th:if="${restaurant.imageName}"
+												th:src="@{/storage/__${restaurant.imageName}__}"
 												class="card-img-top samuraitabelog-horizontal-card-image" alt="店舗画像">
-											<img th:unless="${restaurant.image}" th:src="@{/images/noImage.png}"
+											<img th:unless="${restaurant.imageName}" th:src="@{/images/noImage.png}"
 												class="card-img-top samuraitabelog-horizontal-card-image"
 												alt="NO IMAGE">
 										</div>
@@ -53,7 +53,7 @@
 												<h3 class="card-title mb-3" th:text="${restaurant.name}"></h3>
 												<hr class="mb-3">
 												<p class="card-text mb-2">
-													<span th:text="${restaurant.restaurantDescription}"></span>
+													<span th:text="${restaurant.Description}"></span>
 												</p>
 												<p class="card-text mb-2">
 													<small class="text-muted"

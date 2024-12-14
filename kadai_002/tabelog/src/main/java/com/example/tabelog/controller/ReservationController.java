@@ -44,6 +44,7 @@ public class ReservationController {
          this.stripeService = stripeService;
     }    
 
+     //予約一覧ページへの遷移
     @GetMapping("/reservations")
     public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, Model model) {
         User user = userDetailsImpl.getUser();
@@ -54,6 +55,7 @@ public class ReservationController {
         return "reservations/index";
     }
     
+    //予約する
     @GetMapping("/restaurants/{id}/reservations/input")
     public String input(@PathVariable(name = "id") Integer id,
                         @ModelAttribute @Validated ReservationInputForm reservationInputForm,
@@ -65,7 +67,7 @@ public class ReservationController {
                 
         
         if (bindingResult.hasErrors()) {            
-            model.addAttribute("house", restaurant);            
+            model.addAttribute("restaurant", restaurant);            
             model.addAttribute("errorMessage", "予約内容に不備があります。"); 
             return "restaurants/show";
         }
@@ -75,6 +77,7 @@ public class ReservationController {
         return "redirect:/restaurants/{id}/reservations/confirm";
     }
     
+    //決済
      @GetMapping("/restaurants/{id}/reservations/confirm")
      public String confirm(@PathVariable(name = "id") Integer id,
                            @ModelAttribute ReservationInputForm reservationInputForm,
@@ -84,11 +87,12 @@ public class ReservationController {
      {        
          Restaurant restaurant = restaurantRepository.getReferenceById(id);
          User user = userDetailsImpl.getUser(); 
-                 
+          
+         //チェックイン日と人数を取得
          String checkinDate = reservationInputForm.getFromCheckinDateToCheckoutDate();
          Integer numberOfPeople = reservationInputForm.getNumberOfPeople();
   
-         // 宿泊料金を計算する
+         // 料金を計算する
          Integer price = restaurant.getPrice();        
          Integer amount = reservationService.calculateAmount(price, numberOfPeople);
          
@@ -128,7 +132,7 @@ public class ReservationController {
  			e.printStackTrace();
  		}
 
- 		return "redirect:/reservation?reserved";
+ 		return "redirect:/reservations?reserved";
  	}
 
      

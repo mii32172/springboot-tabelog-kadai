@@ -24,6 +24,7 @@ public class AdminUserController {
 		this.userRepository = userRepository;
 	}
 	
+	//会員一覧画面に遷移
 	 @GetMapping
      public String index(@RequestParam(name = "keyword", required = false) String keyword, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, Model model) {
          Page<User> userPage;
@@ -40,6 +41,7 @@ public class AdminUserController {
          return "admin/users/index";
      }
 	 
+	 //会員詳細画面に遷移
 	 @GetMapping("/{id}")
 	 public String show(@PathVariable(name = "id") Integer id, Model model) {
 		 User user = userRepository.getReferenceById(id);

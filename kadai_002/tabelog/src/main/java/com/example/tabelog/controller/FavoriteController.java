@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.tabelog.entity.Favorite;
 import com.example.tabelog.entity.User;
@@ -46,15 +47,24 @@ public class FavoriteController {
 	
 	/*お気に入りの追加*/
 	@PostMapping("/restaurants/{restaurantId}/favorites/add")
-	public String add(@PathVariable(name = "restaurantId") Integer restaurantId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-		favoriteService.add(userDetailsImpl, restaurantId);
+	public String add(@PathVariable(name = "restaurantId") Integer restaurantId, 
+	                  Model model, 
+	                  @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+	                  RedirectAttributes redirectAttributes) {
+	    favoriteService.add(userDetailsImpl, restaurantId);
+	    redirectAttributes.addFlashAttribute("notFavorite", false);
 	return "redirect:/restaurants/{restaurantId}"; 	
 	}
 	
 	/*お気に入りの解除*/
 	@PostMapping("/restaurants/{restaurantId}/favorites/{id}/delete")
-	public String delete(@PathVariable(name = "restaurantId") Integer restaurantId, @PathVariable(name = "id") Integer id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-		favoriteRepository.deleteById(id);
+	public String delete(@PathVariable(name = "restaurantId") Integer restaurantId, 
+	                     @PathVariable(name = "id") Integer id, 
+	                     Model model, 
+	                     @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+	                     RedirectAttributes redirectAttributes) {
+	    favoriteService.delete(restaurantId, userDetailsImpl.getUser().getId());
+	    redirectAttributes.addFlashAttribute("notFavorite", true);
 		
 	return "redirect:/restaurants/{restaurantId}";
 	}

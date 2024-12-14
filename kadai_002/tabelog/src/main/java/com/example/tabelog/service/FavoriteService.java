@@ -24,10 +24,10 @@ public class FavoriteService {
 	
 	/*お気に入り登録*/
 	@Transactional
-	public void add(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Integer houseId) {
+	public void add(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Integer restaurantId) {
 		Favorite favorite = new Favorite();
 		User user = userDetailsImpl.getUser();
-		Restaurant restaurant =restaurantRepository.getReferenceById(houseId);
+		Restaurant restaurant =restaurantRepository.getReferenceById(restaurantId);
 		
 		favorite.setRestaurant(restaurant);
 		favorite.setUser(user);
@@ -35,7 +35,7 @@ public class FavoriteService {
 		favoriteRepository.save(favorite);
 	}
 	
-	/*お気に入り解除 */
+	/*お気に入り解除 いる？*/
 	@Transactional
 	public void delete(Integer restaurantId, Integer userId) {
 		Favorite favorite = favoriteRepository.findByRestaurantIdAndUserId(restaurantId, userId);
@@ -43,7 +43,6 @@ public class FavoriteService {
 			favoriteRepository.delete(favorite);
 		}
 	}
-	
 	
 
 }

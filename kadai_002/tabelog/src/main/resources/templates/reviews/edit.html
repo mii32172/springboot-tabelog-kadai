@@ -28,9 +28,9 @@
 							</ol>
 						</nav>
 
-						<h1 class="mb-4 text-center" th:text="${user.getName()} + 'のレビュー編集'"></h1>
+						<h1 class="mb-4 text-center">レビュー編集</h1>
 
-						<form method="post" th:action="@{/reviews/__${review.getId()}__/update}"
+						<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/update}"
 							th:object="${reviewEditForm}" enctype="multipart/form-data">
 							<input type="hidden" th:field="*{id}">
 
@@ -55,12 +55,12 @@
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
-									<label for="description" class="col-form-label text-md-left fw-bold">説明</label>
+									<label for="comment" class="col-form-label text-md-left fw-bold">説明</label>
 								</div>
 								<div class="col-md-8">
-									<div th:if="${#fields.hasErrors('description')}" class="text-danger small mb-2"
-										th:errors="*{description}"></div>
-									<textarea class="form-control" th:field="*{description}" cols="30"
+									<div th:if="${#fields.hasErrors('explanation')}" class="text-danger small mb-2"
+										th:errors="*{explanation}"></div>
+									<textarea class="form-control" th:field="*{explanation}" cols="30"
 										rows="5"></textarea>
 								</div>
 							</div>

@@ -41,7 +41,7 @@
 						</nav>
 
 						<!-- 検索フォーム -->
-						<form method="get" th:action="@{/restaurant}" class="w-100 mb-3">
+						<form method="get" th:action="@{/restaurants}" class="w-100 mb-3">
 							<div class="input-group">
 								<input type="text" class="form-control" name="keyword" th:value="${keyword}"
 									placeholder="店舗名・目的地">
@@ -99,7 +99,7 @@
 						<!-- お気に入り店舗 -->
 						<div class="row mb-5" sec:authorize="hasRole('ROLE_PAID')">
 							<h2 class="col-7 text-center mb-3">お気に入り店舗</h2>
-							<a class="col-5 boder-bottom" th:href="@{/favorite/}">お気に入り店舗一覧へ</a>
+							<a class="col-5 boder-bottom" th:href="@{/favorites}">お気に入り店舗一覧へ</a>
 							<div class="row row-cols-lg-3 row-cols-1 g-3 mb-5">
 								<div class="col" th:each="newFavorite : ${newFavorite}">
 									<a th:href="@{/restaurants/__${newFavorite.restaurant.getId()}__}"

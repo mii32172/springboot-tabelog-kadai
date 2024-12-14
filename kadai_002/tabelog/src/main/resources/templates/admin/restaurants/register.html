@@ -56,6 +56,22 @@
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
+									<label for="category" class="col-form-label text-md-left fw-bold">カテゴリ</label>
+								</div>
+								<div class="col-md-8">
+									<select id="category" name="category" class="form-control">
+										<option value="" hidden>選択してください</option>
+										<option th:each="category : ${category}" th:value="${category.id}"
+											th:text="${category.name}"
+											th:selected="${category.id == selectedCategoryId}"></option>
+									</select>
+									<div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2"
+										th:errors="*{category}"></div>
+								</div>
+							</div>
+
+							<div class="form-group row mb-3">
+								<div class="col-md-4">
 									<label for="description" class="col-form-label text-md-left fw-bold">説明</label>
 								</div>
 								<div class="col-md-8">
@@ -65,26 +81,26 @@
 										rows="5"></textarea>
 								</div>
 							</div>
-
+							
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
-									<label for="price" class="col-form-label text-md-left fw-bold">宿泊料金（単位：円）</label>
+									<label for="openTime" class="col-form-label text-md-left fw-bold">営業時間</label>
 								</div>
 								<div class="col-md-8">
-									<div th:if="${#fields.hasErrors('price')}" class="text-danger small mb-2"
-										th:errors="*{price}"></div>
-									<input type="number" class="form-control" th:field="*{price}">
+									<div th:if="${#fields.hasErrors('openTime')}" class="text-danger small mb-2"
+										th:errors="*{openTime}"></div>
+									<input type="text" class="form-control" th:field="*{openTime}">
 								</div>
 							</div>
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
-									<label for="capacity" class="col-form-label text-md-left fw-bold">定員（単位：人）</label>
+									<label for="price" class="col-form-label text-md-left fw-bold">料金（単位：円）</label>
 								</div>
 								<div class="col-md-8">
-									<div th:if="${#fields.hasErrors('capacity')}" class="text-danger small mb-2"
-										th:errors="*{capacity}"></div>
-									<input type="number" class="form-control" th:field="*{capacity}">
+									<div th:if="${#fields.hasErrors('price')}" class="text-danger small mb-2"
+										th:errors="*{price}"></div>
+									<input type="number" class="form-control" th:field="*{price}">
 								</div>
 							</div>
 
@@ -118,6 +134,17 @@
 									<div th:if="${#fields.hasErrors('phoneNumber')}" class="text-danger small mb-2"
 										th:errors="*{phoneNumber}"></div>
 									<input type="text" class="form-control" th:field="*{phoneNumber}">
+								</div>
+							</div>
+							
+							<div class="form-group row mb-3">
+								<div class="col-md-4">
+									<label for="closingDay" class="col-form-label text-md-left fw-bold">定休日</label>
+								</div>
+								<div class="col-md-8">
+									<div th:if="${#fields.hasErrors('closingDay')}" class="text-danger small mb-2"
+										th:errors="*{closingDay}"></div>
+									<input type="text" class="form-control" th:field="*{closingDay}">
 								</div>
 							</div>
 

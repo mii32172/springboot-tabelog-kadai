@@ -59,9 +59,11 @@
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownFreeorPaid">
 								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/user}">会員情報</a>
-								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/reservations}">予約一覧</a>
+								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/reservations}"
+								sec:authorize="hasRole('ROLE_PAID')">予約一覧</a>
 								<a class="dropdown-item samutaitabelog-dropdown-item"
-									th:href="@{/favorites}">お気に入り店舗一覧</a>
+									th:href="@{/favorites}"
+									sec:authorize="hasRole('ROLE_PAID')">お気に入り店舗一覧</a>
 								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/user/membercancel}"
 									sec:authorize="hasRole('ROLE_FREE')">無料会員を削除する</a>
 								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/subsc}"

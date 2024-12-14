@@ -29,7 +29,7 @@
 					</div>
 
 					<div class="col-xl-3 col-lg-4 col-md-12">
-						<form method="get" th:action="@{/restaurant}" class="w-100 mb-3">
+						<form method="get" th:action="@{/restaurants}" class="w-100 mb-3">
 							<div class="input-group">
 								<input type="text" class="form-control" name="keyword" th:value="${keyword}"
 									placeholder="店舗名・目的地">
@@ -42,7 +42,7 @@
 								金額から探す
 							</div>
 							<div class="card-body">
-								<form method="get" th:action="@{/restaurant}" class="w-100">
+								<form method="get" th:action="@{/restaurants}" class="w-100">
 									<div class="form-group mb-3">
 										<select class="form-control form-select" name="price">
 											<option value="" hidden>選択してください</option>
@@ -65,7 +65,7 @@
 								エリアから探す
 							</div>
 							<div class="card-body">
-								<form method="get" th:action="@{/restaurant}" class="w-100">
+								<form method="get" th:action="@{/restaurants}" class="w-100">
 									<div class="form-group mb-3">
 										<select class="form-control form-select" name="area">
 											<option value="" hidden>選択してください</option>
@@ -102,7 +102,7 @@
 							<p th:unless="${restaurantPage.getTotalPages() > 1}" class="fs-5 mb-3"
 								th:text="${'検索結果：' + restaurantPage.getTotalElements() + '件'}"></p>
 
-							<form method="get" th:action="@{/restaurant}" class="mb-3 samuraitabelog-sort-box">
+							<form method="get" th:action="@{/restaurants}" class="mb-3 samuraitabelog-sort-box">
 								<input th:if="${keyword}" type="hidden" name="keyword" th:value="${keyword}">
 								<input th:if="${area}" type="hidden" name="area" th:value="${area}">
 								<input th:if="${price}" type="hidden" name="price" th:value="${price}">
@@ -115,7 +115,7 @@
 						</div>
 
 						<div class="mb-3" th:each="restaurant : ${restaurantPage}">
-							<a th:href="@{/restaurant/__${restaurant.getId()}__}"
+							<a th:href="@{/restaurants/__${restaurant.getId()}__}"
 								class="link-dark samuraitabelog-card-link">
 								<div class="card h-100">
 									<div class="row g-0">

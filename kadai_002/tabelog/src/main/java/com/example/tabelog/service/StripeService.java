@@ -41,6 +41,7 @@ public class StripeService {
 		this.userService = userService;
 	}
 
+	//予約　67 ={CHECKOUT_SESSION_ID}いるか不明
 	public String createStripeSession(String restaurantName, ReservationRegisterForm reservationRegisterForm,
 			HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
@@ -62,9 +63,9 @@ public class StripeService {
 								.build())
 				.setMode(SessionCreateParams.Mode.PAYMENT)
 				.setSuccessUrl(
-						requestUrl.replaceAll("/restaurant/[0-9]+/reservation/confirm", "")
-								+ "/reservation?reserved?sessionId={CHECKOUT_SESSION_ID}")
-				.setCancelUrl(requestUrl.replace("/reservation/confirm", ""))
+						requestUrl.replaceAll("/restaurants/[0-9]+/reservations/confirm", "")
+								+ "/reservations?reserved?sessionId={CHECKOUT_SESSION_ID}")
+				.setCancelUrl(requestUrl.replace("/reservations/confirm", ""))
 				.setPaymentIntentData(
 						SessionCreateParams.PaymentIntentData.builder()
 								.putMetadata("restaurantId", reservationRegisterForm.getRestaurantId().toString())
@@ -83,20 +84,18 @@ public class StripeService {
 		}
 	}
 
-	public void expireCheckoutSession(String sessionId) throws StripeException {
-		Stripe.apiKey = stripeApiKey;
-
-		// Checkout Sessionの期限を切らす（キャンセルする）
-		Session session = Session.retrieve(sessionId);
-		session.expire();
-	}
-
+	//セッションから予約情報を取得しReservationServiceクラスを介してデータべースに登録する
 	public void processSessionCompleted(Event event) {
 		Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
 		optionalStripeObject.ifPresentOrElse(stripeObject -> {
 			Session session = (Session) stripeObject;
-			if (session.getMode().equals("subscription"))
+
+			//if文追加いる？
+			if (session.getMode().equals("subscription")) {
+				System.out.println("Session is a subscription, exiting.");//詳細を表示
 				return;
+			}
+
 			SessionRetrieveParams params = SessionRetrieveParams.builder().addExpand("payment_intent").build();
 
 			try {
@@ -117,6 +116,16 @@ public class StripeService {
 				});
 	}
 
+	//予約削除
+	public void expireCheckoutSession(String sessionId) throws StripeException {
+		Stripe.apiKey = stripeApiKey;
+
+		// Checkout Sessionの期限を切らす（キャンセルする）
+		Session session = Session.retrieve(sessionId);
+		session.expire();
+	}
+
+	//有料会員登録
 	public String createSubscription(User user, HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
 		String requestUrl = new String(httpServletRequest.getRequestURL());
@@ -127,7 +136,7 @@ public class StripeService {
 				.addLineItem(
 						SessionCreateParams.LineItem.builder()
 								.setQuantity(1L)
-								.setPrice("price_1PrWUNIzVhtPxktW0z7zQ0n8") // あなたが作成した価格ID
+								.setPrice("price_1QTYCqHp1iv0LmvpyJJoHPin") // あなたが作成した価格ID
 								.build())
 				.setMode(SessionCreateParams.Mode.SUBSCRIPTION)
 				.setSuccessUrl(requestUrl + "/user/success?session_id={CHECKOUT_SESSION_ID}")
@@ -143,8 +152,9 @@ public class StripeService {
 		}
 	}
 
+	//サブスクリプション生成
 	public void processSubscriptionCreated(String subscriptionId, String customerId) throws StripeException {
-		Customer customer = Customer.retrieve(customerId);
+		Customer customer = Customer.retrieve(customerId); //取得する
 		String email = customer.getEmail();
 		User user = userRepository.findByEmail(email);
 
@@ -153,6 +163,7 @@ public class StripeService {
 		userRepository.save(user);
 	}
 
+	//サブスクリプション支払い成功　ロールを有料会員に変更
 	public void processSubscriptionPaymentSucceeded(String subscriptionId, String customerId) throws StripeException {
 		Customer customer = Customer.retrieve(customerId);
 		String email = customer.getEmail();
@@ -176,6 +187,7 @@ public class StripeService {
 		}
 	}
 
+	//有料会員退会　ロールを無料会員に変更
 	public void cancelSubscription(String subscriptionId, String email) throws StripeException {
 		Stripe.apiKey = stripeApiKey;
 
@@ -199,6 +211,7 @@ public class StripeService {
 		}
 	}
 
+	//クレジット編集？
 	public String createCustomerPortalSession(String email, HttpServletRequest httpServletRequest)
 			throws StripeException {
 		Stripe.apiKey = stripeApiKey;
@@ -228,10 +241,14 @@ public class StripeService {
 				.setReturnUrl(returnUrl) // ポータルを退出したときのリダイレクト先URL
 				.build();
 
-		com.stripe.model.billingportal.Session session = com.stripe.model.billingportal.Session.create(params);
-
-		// 生成されたポータルURLを返す
-		return session.getUrl();
+		try {
+		    com.stripe.model.billingportal.Session session = com.stripe.model.billingportal.Session.create(params);
+		    return session.getUrl();
+		} catch (StripeException e) {
+		    // エラーの詳細をログに出力
+			System.out.println("Stripe API Error: " + e.getMessage());
+		    throw e; // エラーを再スローして適切な場所でハンドリング
+		}
 	}
 
 	public void processReservationPayment(Event event) {

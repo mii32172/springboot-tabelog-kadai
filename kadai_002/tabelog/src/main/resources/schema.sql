@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS restaurants (
      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-     category_id INT NOT NULL,
+     category_id INT,
      name VARCHAR(50) NOT NULL,  
      image_name VARCHAR(255),
      description VARCHAR(255) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS restaurants (
      closing_day VARCHAR(50) NOT NULL,
      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (category_id) REFERENCES categories (id)
+     FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL
  );
  
  CREATE TABLE IF NOT EXISTS roles (
@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS restaurants (
      amount INT NOT NULL,
      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     payment_id VARCHAR(255),
      session_id VARCHAR(255),
      FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
      FOREIGN KEY (user_id) REFERENCES users (id)
@@ -87,7 +86,7 @@ CREATE TABLE IF NOT EXISTS favorites (
      restaurant_id INT NOT NULL,
      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id),
-     FOREIGN KEY (user_id) REFERENCES users (id),
+     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
+     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
      UNIQUE ( restaurant_id, user_id )
 );

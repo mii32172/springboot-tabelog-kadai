@@ -23,5 +23,4 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer>{
 
 	List<Favorite> findTop3ByUserIdOrderByCreatedAtDesc(int user);
 
-
 }

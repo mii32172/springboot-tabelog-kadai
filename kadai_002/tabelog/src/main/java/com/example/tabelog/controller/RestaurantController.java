@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.tabelog.entity.Category;
 import com.example.tabelog.entity.Favorite;
 import com.example.tabelog.entity.Restaurant;
 import com.example.tabelog.entity.Review;
@@ -36,7 +37,6 @@ public class RestaurantController {
 	private final FavoriteRepository favoriteRepository;
 	private final CategoryRepository categoryRepository;
 
-	int houseId = 1;
 
 	public RestaurantController(RestaurantRepository restaurantRepository, ReviewRepository reviewRepository,
 			FavoriteRepository favoriteRepository, CategoryRepository categoryRepository) {
@@ -120,11 +120,31 @@ public class RestaurantController {
 			List<Review> userHasReviews = reviewRepository.findByRestaurantId(id);
 			model.addAttribute("userHasReviews", userHasReviews.isEmpty());
 		}
-		model.addAttribute("house", restaurant);
+		model.addAttribute("restaurant", restaurant);
 		model.addAttribute("reservationInputForm", new ReservationInputForm());
 
 		model.addAttribute("reviewPage", reviewPage);
 
-		return "houses/show";
+		return "restaurants/show";
+	}
+	
+	@GetMapping("/category/{id}")
+	public String category(@PathVariable("id") Integer id,
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
+			Model model) {
+
+		Category category = categoryRepository.getReferenceById(id);
+		Page<Restaurant> restaurantPage;
+		if (keyword != null && !keyword.isEmpty()) {
+			restaurantPage = restaurantRepository.findByCategoryIdAndNameLike(id, "%" + keyword + "%", pageable);
+		} else {
+			restaurantPage = restaurantRepository.findByCategoryId(id, pageable);
+		}
+		model.addAttribute("category", category);
+		model.addAttribute("restaurantPage", restaurantPage);
+		model.addAttribute("keyword", keyword);
+
+		return "restaurants/category";
 	}
 }

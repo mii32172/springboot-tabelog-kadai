@@ -57,10 +57,10 @@ public class AdminController {
 			restaurantPage = restaurantRepository.findAll(pageable);
 		}
 		
-		model.addAttribute("housePage", restaurantPage);
+		model.addAttribute("restaurantPage", restaurantPage);
 		model.addAttribute("keyword", keyword);
 		
-		return "admin/restaurants/adminRestaurant";
+		return "admin/restaurants/index";
 	}
 	
 	@GetMapping("/restaurants/{id}")
@@ -80,6 +80,7 @@ public class AdminController {
 		return "admin/restaurants/register";
 	}
 	
+	//店舗登録
 	@PostMapping("/restaurants/create")
 	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, 
 			BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
@@ -97,6 +98,7 @@ public class AdminController {
          return "redirect:/admin/restaurants";
      }    
 	
+	//店舗情報編集ページに遷移
 	 @GetMapping("/restaurants/{id}/edit")
      public String edit(@PathVariable(name = "id") Integer id, Model model) {
          Restaurant restaurant = restaurantRepository.getReferenceById(id);
@@ -112,6 +114,7 @@ public class AdminController {
          return "admin/restaurants/edit";
 	}
 	 
+	 //店舗情報更新
 	 @PostMapping("/restaurants/{id}/update")
      public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, 
     		 BindingResult bindingResult, 
@@ -126,6 +129,7 @@ public class AdminController {
          return "redirect:/admin/restaurants";
      } 
 	 
+	 //店舗情報削除
 	 @PostMapping("/restaurants/{id}/delete")
      public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {        
          restaurantRepository.deleteById(id);

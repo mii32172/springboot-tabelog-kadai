@@ -31,19 +31,26 @@ public class SubscriptionController {
 		this.roleRepository = roleRepository;
 	}
 
+	//有料会員登録
 	@GetMapping("/subsc")
 	public String subsc(HttpServletRequest httpServletRequest,
 			@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 			Model model) {
 		User user = userDetailsImpl.getUser(); // 現在のユーザー情報を取得するメソッド
 
-		// サブスクリプション作成のためのセッションIDを生成
-		String sessionId = stripeService.createSubscription(user, httpServletRequest);
+		// サブスクリプション作成のためのセッションID(subscriptionID)を生成
+		String subscriptionId = stripeService.createSubscription(user, httpServletRequest);
+		
+		
+		User dbUser = userRepository.getReferenceById(user.getId());
+		dbUser.setSubscriptionId(subscriptionId);
+		userRepository.save(dbUser);
 
 		// セッションIDをモデルに追加
-		model.addAttribute("sessionId", sessionId);
+		model.addAttribute("subscriptionId", subscriptionId);
 		return "user/subscription";
 	}
+	
 
 	@GetMapping("/subsc/user/success")
 	public String success(@RequestParam("session_id") String sessionId, RedirectAttributes redirectAttributes) {
@@ -52,6 +59,7 @@ public class SubscriptionController {
 		return "redirect:/user"; // 成功メッセージページにリダイレクト
 	}
 
+	//有料会員登録キャンセル
 	@GetMapping("/user/cancel")
 	public String cancel(RedirectAttributes redirectAttributes) {
 		// キャンセルした場合の処理
@@ -59,11 +67,13 @@ public class SubscriptionController {
 		return "redirect:/user"; // キャンセルページにリダイレクト
 	}
 
+	//有料会員登録退会
 	@GetMapping("/withdrawal")
 	public String withdrawal(Model model) {
 		return "user/withdrawal";
 	}
 
+	//有料会員を退会する場合はこちらボタンを押したとき
 	@PostMapping("/cancel-subscription")
 	public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 			RedirectAttributes redirectAttributes) {
@@ -88,6 +98,8 @@ public class SubscriptionController {
 
 	}
 
+
+	//クレジットカード編集？StripeService　createCustomerPortalSessionより
 	@GetMapping("/customer/portal")
 	public RedirectView redirectToCustomerPortal(@RequestParam("email") String email,
 			HttpServletRequest httpServletRequest) throws StripeException {

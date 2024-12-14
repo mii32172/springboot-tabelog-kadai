@@ -1,3 +1,10 @@
+-- 有料会員のStripe顧客IDを設定
+--UPDATE users 
+--SET customer_id = 'cus_premium_member_12345' 
+--WHERE email = 'hanako.samurai@example.com';
+
+
+
 -- categoriesテーブル
 INSERT IGNORE INTO categories (id, name) VALUES(1, "カフェ");
 INSERT IGNORE INTO categories (id, name) VALUES(2, "焼肉");
@@ -17,7 +24,7 @@ INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, 
 INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (8, 4, 'サムライ亭', 'house08.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '11:00-26:00',  '1000-2000',  '450-0008', '名古屋市昭和区X-XX-XX', '012-345-678', '木曜日');
 INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (9, 5, 'SAMURAI屋', 'house09.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '10:00-23:00',  '1000-2000',  '450-0009', '名古屋市瑞穂区X-XX-XX', '012-345-678', '金曜日');
 INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (10, 5, 'サムライ丼', 'house10.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '09:00-22:00',  '1000-2000',  '450-0010', '名古屋市熱田区X-XX-XX', '012-345-678', '土曜日');
-INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (11, 6, '和食侍', 'house11.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '12:00-20:00',  '2000-4000',  '450-0011', '名古屋市名東区X-XX-XX', '012-345-678', '日曜日');
+INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (11, 6, '和食侍', 'e3bbd41a-ee44-4942-bedf-7b2a50c2393a.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '12:00-20:00',  '2000-4000',  '450-0011', '名古屋市名東区X-XX-XX', '012-345-678', '日曜日');
 
 
 -- rolesテーブル
@@ -60,14 +67,14 @@ INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id)
 
 
 -- favoritesテーブル
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (1, 1, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (2, 2, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (3, 3, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (4, 4, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (5, 5, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (6, 6, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (7, 7, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (8, 8, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (9, 9, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (10, 10, 1);
-INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (11, 11, 1);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (1, 1, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (2, 2, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (3, 3, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (4, 4, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (5, 5, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (6, 6, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (7, 7, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (8, 8, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (9, 9, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (10, 10, 2);
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (11, 11, 2);
