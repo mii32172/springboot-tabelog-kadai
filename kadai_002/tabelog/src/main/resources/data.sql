@@ -39,9 +39,9 @@ INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled)
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (2, '侍 花子', 'サムライ ハナコ', 'hanako.samurai@example.com', '$2a$10$2JNjTwZBwo7fprL2X4sv.OEKqxnVtsVQvuXDkI8xVGix.U3W5B7CO', 2, true);
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (3, '侍 義勝', 'サムライ ヨシカツ', 'yoshikatsu.samurai@example.com', '$2a$10$2JNjTwZBwo7fprL2X4sv.OEKqxnVtsVQvuXDkI8xVGix.U3W5B7CO', 3, true);
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (4, '侍 幸美', 'サムライ サチミ', 'sachimi.samurai@example.com', 'password', 2, false);
-INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (5, '侍 雅', 'サムライ ミヤビ', 'miyabi.samurai@example.com', 'password', 1, false);
+INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (5, '侍 雅', 'サムライ ミヤビ', 'miyabi.samurai@example.com', 'password', 2, false);
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (6, '侍 正保', 'サムライ マサヤス', 'masayasu.samurai@example.com', 'password', 2, false);
-INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (7, '侍 真由美', 'サムライ マユミ', 'mayumi.samurai@example.com', 'password', 1, false);
+INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (7, '侍 真由美', 'サムライ マユミ', 'mayumi.samurai@example.com', 'password', 2, false);
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (8, '侍 安民', 'サムライ ヤスタミ', 'yasutami.samurai@example.com', 'password', 2, false);
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (9, '侍 章緒', 'サムライ アキオ', 'akio.samurai@example.com', 'password', 1, false);
 INSERT IGNORE INTO users (id, name, furigana, email, password, role_id, enabled) VALUES (10, '侍 祐子', 'サムライ ユウコ', 'yuko.samurai@example.com', 'password', 2, false);
@@ -61,10 +61,11 @@ INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, numbe
 INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (1, '侍 幸美', 5, '静かでゆっくりできて最高でした。', 1, 4);
 INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (2, '侍 花子', 3, 'まあまあでした。', 1, 2);
 INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (3, '侍 正保', 4, 'コーヒーがおいしかったです。', 1, 6);
-INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (4, '侍 安民', 5, '静かでゆっくりできて最高でした。', 1, 8);
-INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (5, '侍 裕子', 5, '静かでゆっくりできて最高でした。', 1, 10);
-INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (6, '侍 信平', 5, '静かでゆっくりできて最高でした。', 1, 12);
-
+INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (4, '侍 安民', 5, 'おいしかったです。', 1, 8);
+INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (5, '侍 裕子', 5, 'インスタ映えのメニューでした。', 1, 10);
+INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (6, '侍 信平', 5, '店内がおしゃれでした。', 1, 12);
+INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (7, '侍 雅', 5, 'ゆっくりできました。', 1, 5);
+INSERT IGNORE INTO reviews (id, name, star, explanation, restaurant_id, user_id) VALUES (8, '侍 真由美', 2, 'メニューの提供に時間がかかると思いました。', 1, 7);
 
 -- favoritesテーブル
 INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES (1, 1, 2);

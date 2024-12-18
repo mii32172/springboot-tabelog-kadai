@@ -10,7 +10,7 @@ public class ReservationRegisterForm {
         
     private Integer userId;    
         
-    private String checkinDate;        
+    private String checkinDate;   
     
     private Integer numberOfPeople;
     

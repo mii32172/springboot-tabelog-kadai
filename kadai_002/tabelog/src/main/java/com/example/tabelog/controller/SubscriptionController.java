@@ -99,7 +99,7 @@ public class SubscriptionController {
 	}
 
 
-	//クレジットカード編集？StripeService　createCustomerPortalSessionより
+	//クレジットカード編集 StripeService　createCustomerPortalSessionより
 	@GetMapping("/customer/portal")
 	public RedirectView redirectToCustomerPortal(@RequestParam("email") String email,
 			HttpServletRequest httpServletRequest) throws StripeException {

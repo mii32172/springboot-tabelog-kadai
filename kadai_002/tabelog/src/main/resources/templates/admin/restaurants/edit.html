@@ -33,6 +33,7 @@
 							th:object="${restaurantEditForm}" enctype="multipart/form-data">
 							<input type="hidden" th:field="*{id}">
 
+							<!-- 店舗名 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="name" class="col-form-label text-md-left fw-bold">店舗名</label>
@@ -44,6 +45,7 @@
 								</div>
 							</div>
 
+							<!-- 店舗画像 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="imageFile" class="col-form-label text-md-left fw-bold">店舗画像</label>
@@ -60,6 +62,26 @@
 									th:src="@{/storage/__${imageName}__}" class="mb-3"></div>
 							<div th:unless="${imageName}" class="row" id="imagePreview"></div>
 
+							<!-- カテゴリ -->
+							<div class="form-group row mb-3">
+								<div class="col-md-4">
+									<label for="category" class="col-form-label text-md-left fw-bold">カテゴリ</label>
+								</div>
+								<div class="col-md-8">
+									<div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2"
+										th:errors="*{category}"></div>
+									<select class="form-control form-select" th:field="*{category}">
+										<option value="" hidden>カテゴリを選択してください</option>
+										<!-- カテゴリの一覧を動的に生成 -->
+										<option th:each="category : ${categories}" th:value="${category.id}"
+											th:text="${category.name}"
+											th:selected="${category.id == restaurantEditForm.category.id}">
+										</option>
+									</select>
+								</div>
+							</div>
+
+							<!-- 説明 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="description" class="col-form-label text-md-left fw-bold">説明</label>
@@ -72,6 +94,7 @@
 								</div>
 							</div>
 
+							<!-- 営業時間 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="openTime" class="col-form-label text-md-left fw-bold">営業時間</label>
@@ -83,8 +106,7 @@
 								</div>
 							</div>
 
-
-
+							<!-- 料金 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="price" class="col-form-label text-md-left fw-bold">料金（単位：円）</label>
@@ -96,8 +118,7 @@
 								</div>
 							</div>
 
-
-
+							<!-- 郵便番号 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="postalCode" class="col-form-label text-md-left fw-bold">郵便番号</label>
@@ -120,6 +141,7 @@
 								</div>
 							</div>
 
+							<!-- 電話番号 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="phoneNumber" class="col-form-label text-md-left fw-bold">電話番号</label>
@@ -131,6 +153,7 @@
 								</div>
 							</div>
 
+							<!-- 定休日 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="closingDay" class="col-form-label text-md-left fw-bold">定休日</label>

@@ -101,6 +101,7 @@ public class RestaurantController {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		Page<Review> reviewPage = reviewRepository.findByRestaurantId(id, pageable);
 
+
 		if (userDetailsImpl != null) {
 			User user = userDetailsImpl.getUser();
 			List<Review> userHasReviews = reviewRepository.findByUserIdAndRestaurantId(user.getId(), id);

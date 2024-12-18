@@ -90,7 +90,7 @@ public class StripeService {
 		optionalStripeObject.ifPresentOrElse(stripeObject -> {
 			Session session = (Session) stripeObject;
 
-			//if文追加いる？
+			//if文追加
 			if (session.getMode().equals("subscription")) {
 				System.out.println("Session is a subscription, exiting.");//詳細を表示
 				return;
@@ -211,7 +211,7 @@ public class StripeService {
 		}
 	}
 
-	//クレジット編集？
+	//クレジット編集
 	public String createCustomerPortalSession(String email, HttpServletRequest httpServletRequest)
 			throws StripeException {
 		Stripe.apiKey = stripeApiKey;

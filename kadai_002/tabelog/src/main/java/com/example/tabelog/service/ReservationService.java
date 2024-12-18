@@ -51,26 +51,20 @@ public class ReservationService {
 		LocalDate checkinDate = parseCheckinDate(paymentIntentObject.get("checkinDate"));
 		Integer numberOfPeople = Integer.valueOf(paymentIntentObject.get("numberOfPeople"));        
         Integer amount = Integer.valueOf(paymentIntentObject.get("amount"));
-        /*
-        //追加場所
-        String paymentId = paymentIntentObject.get("paymentId");
-		String sessionId = paymentIntentObject.get("sessionId");
-         */
+        
         reservation.setRestaurant(restaurant);
         reservation.setUser(user);
         reservation.setCheckinDate(checkinDate);
          reservation.setNumberOfPeople(numberOfPeople);
          reservation.setAmount(amount);
-         /*
-         reservation.setPaymentId(paymentId); //追加場所
- 		reservation.setSessionId(sessionId); //追加場所
- 		*/
+        
 
         
         reservationRepository.save(reservation);
     }    
   
-    
+   
+	
     // 価格を計算する
     public Integer calculateAmount(Integer price, Integer numberOfPeople) {
  
@@ -87,4 +81,3 @@ public class ReservationService {
 		reservationRepository.deleteById(reservationId);
 	}
 }
-

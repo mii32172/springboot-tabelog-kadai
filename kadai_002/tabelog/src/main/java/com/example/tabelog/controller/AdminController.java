@@ -33,111 +33,122 @@ public class AdminController {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantService restaurantService;
 	private final CategoryRepository categoryRepository;
-	
-	public AdminController(RestaurantRepository restaurantRepository, RestaurantService restaurantService, CategoryRepository categoryRepository) {
+
+	public AdminController(RestaurantRepository restaurantRepository, RestaurantService restaurantService,
+			CategoryRepository categoryRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.restaurantService = restaurantService;
 		this.categoryRepository = categoryRepository;
 	}
-	
+
 	@GetMapping
 	public String top() {
 		return "admin/adminTop";
 	}
-	
+
 	@GetMapping("/restaurants")
 	public String restaurant(Model model,
-			@PageableDefault(page = 0,size = 10, sort="id", direction = Direction.ASC) Pageable pageable, 
-			@RequestParam(name = "keyword", required =false) String keyword) {
+			@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
+			@RequestParam(name = "keyword", required = false) String keyword) {
 		Page<Restaurant> restaurantPage;
-		
-		if (keyword !=null && !keyword.isEmpty()) {
+
+		if (keyword != null && !keyword.isEmpty()) {
 			restaurantPage = restaurantRepository.findByNameLike("%" + keyword + "%", pageable);
 		} else {
 			restaurantPage = restaurantRepository.findAll(pageable);
 		}
-		
+
 		model.addAttribute("restaurantPage", restaurantPage);
 		model.addAttribute("keyword", keyword);
-		
+
 		return "admin/restaurants/index";
 	}
-	
+
 	@GetMapping("/restaurants/{id}")
-	public String show(@PathVariable(name="id") Integer id, Model model) {
+	public String show(@PathVariable(name = "id") Integer id, Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
-		
+
 		model.addAttribute("restaurant", restaurant);
-		
+
 		return "admin/restaurants/show";
 	}
-	
+
 	@GetMapping("/restaurants/register")
 	public String register(Model model) {
 		List<Category> category = categoryRepository.findAll();// カテゴリのリストを取得
 		model.addAttribute("category", category);
-		model.addAttribute("restaurantRegisterForm" , new RestaurantRegisterForm());
+		model.addAttribute("restaurantRegisterForm", new RestaurantRegisterForm());
 		return "admin/restaurants/register";
 	}
-	
+
 	//店舗登録
 	@PostMapping("/restaurants/create")
-	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, 
+	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
-		 if (bindingResult.hasErrors()) {
-			 List<Category> category = categoryRepository.findAll(); // エラーがある場合、カテゴリリストを再度取得
-			 
-			 model.addAttribute("category", category);
-			 
-             return "admin/restaurants/register";
-         }
-         
-         restaurantService.create(restaurantRegisterForm);
-         redirectAttributes.addFlashAttribute("successMessage", "店舗を登録しました。");    
-         
-         return "redirect:/admin/restaurants";
-     }    
-	
-	//店舗情報編集ページに遷移
-	 @GetMapping("/restaurants/{id}/edit")
-     public String edit(@PathVariable(name = "id") Integer id, Model model) {
-         Restaurant restaurant = restaurantRepository.getReferenceById(id);
-         String imageName = restaurant.getImageName();
-         RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(), restaurant.getName(), null, 
-        		 restaurant.getCategory(), restaurant.getDescription(),restaurant.getOpenTime(),
-        		 restaurant.getPrice(), restaurant.getPostalCode(), restaurant.getAddress(), 
-        		 restaurant.getPhoneNumber(), restaurant.getClosingDay());
-         
-         model.addAttribute("imageName", imageName);
-         model.addAttribute("restaurantEditForm", restaurantEditForm);
-         
-         return "admin/restaurants/edit";
+		if (bindingResult.hasErrors()) {
+			List<Category> category = categoryRepository.findAll(); // エラーがある場合、カテゴリリストを再度取得
+
+			model.addAttribute("category", category);
+
+			return "admin/restaurants/register";
+		}
+
+		restaurantService.create(restaurantRegisterForm);
+		redirectAttributes.addFlashAttribute("successMessage", "店舗を登録しました。");
+
+		return "redirect:/admin/restaurants";
 	}
-	 
-	 //店舗情報更新
-	 @PostMapping("/restaurants/{id}/update")
-     public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, 
-    		 BindingResult bindingResult, 
-    		 RedirectAttributes redirectAttributes) {        
-         if (bindingResult.hasErrors()) {
-             return "admin/restaurants/edit";
-         }
-         
-         restaurantService.update(restaurantEditForm);
-         redirectAttributes.addFlashAttribute("successMessage", "店舗情報を編集しました。");
-         
-         return "redirect:/admin/restaurants";
-     } 
-	 
-	 //店舗情報削除
-	 @PostMapping("/restaurants/{id}/delete")
-     public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {        
-         restaurantRepository.deleteById(id);
-                 
-         redirectAttributes.addFlashAttribute("successMessage", "店舗を削除しました。");
-         
-         return "redirect:/admin/restaurants";
-     }    
+
+	//店舗情報編集ページに遷移
+	@GetMapping("/restaurants/{id}/edit")
+	public String edit(@PathVariable(name = "id") Integer id, Model model) {
+		Restaurant restaurant = restaurantRepository.getReferenceById(id);
+		String imageName = restaurant.getImageName();
+		RestaurantEditForm restaurantEditForm = new RestaurantEditForm(
+				restaurant.getId(),
+				restaurant.getName(),
+				null,
+				restaurant.getCategory(),
+				restaurant.getDescription(),
+				restaurant.getOpenTime(),
+				restaurant.getPrice(),
+				restaurant.getPostalCode(),
+				restaurant.getAddress(),
+				restaurant.getPhoneNumber(),
+				restaurant.getClosingDay());
+
+		// カテゴリ一覧をモデルに追加
+		List<Category> categories = categoryRepository.findAll();
+		model.addAttribute("categories", categories);
+		model.addAttribute("restaurantEditForm", restaurantEditForm);
+
+		model.addAttribute("imageName", imageName);
+
+		return "admin/restaurants/edit";
+	}
+
+	//店舗情報更新
+	@PostMapping("/restaurants/{id}/update")
+	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm,
+			BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) {
+		if (bindingResult.hasErrors()) {
+			return "admin/restaurants/edit";
+		}
+
+		restaurantService.update(restaurantEditForm);
+		redirectAttributes.addFlashAttribute("successMessage", "店舗情報を編集しました。");
+
+		return "redirect:/admin/restaurants";
+	}
+
+	//店舗情報削除
+	@PostMapping("/restaurants/{id}/delete")
+	public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		restaurantRepository.deleteById(id);
+
+		redirectAttributes.addFlashAttribute("successMessage", "店舗を削除しました。");
+
+		return "redirect:/admin/restaurants";
+	}
 }
-
-
