@@ -65,11 +65,11 @@
 									th:href="@{/favorites}"
 									sec:authorize="hasRole('ROLE_PAID')">お気に入り店舗一覧</a>
 								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/user/membercancel}"
-									sec:authorize="hasRole('ROLE_FREE')">無料会員を削除する</a>
+									sec:authorize="hasRole('ROLE_FREE')">無料会員を退会する</a>
 								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/subsc}"
 									sec:authorize="hasRole('ROLE_FREE')">有料会員</a>
 								<a class="dropdown-item samuraitabelog-dropdown-item" th:href="@{/withdrawal}"
-									sec:authorize="hasRole('ROLE_PAID')">有料会員退会</a>
+									sec:authorize="hasRole('ROLE_PAID')">有料会員解約</a>
 
 
 								<div class="dropdown-divider"></div>

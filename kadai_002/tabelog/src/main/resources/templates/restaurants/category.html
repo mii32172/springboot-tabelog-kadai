@@ -27,7 +27,7 @@
 					<h1 class="text-center mb-4" th:text="${category.getName()} + '一覧'"></h1>
 
 					<div class="col-xl-3 col-lg-4 col-md-12">
-						<form method="get" th:action="@{/restaurants/category/__${category.getId()}}" class="w-100 mb-3">
+						<form method="get" th:action="@{/restaurants/category/__${category.getId()}__}" class="w-100 mb-3">
 							<div class="input-group">
 								<input type="text" class="form-control" name="keyword" th:value="${keyword}"
 									placeholder="店舗名・目的地">

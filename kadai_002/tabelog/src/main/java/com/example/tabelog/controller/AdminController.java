@@ -40,6 +40,28 @@ public class AdminController {
 		this.restaurantService = restaurantService;
 		this.categoryRepository = categoryRepository;
 	}
+	
+	private String convertDayToJapanese(String englishDay) {
+	    switch (englishDay) {
+	        case "Monday":
+	            return "月曜日";
+	        case "Tuesday":
+	            return "火曜日";
+	        case "Wednesday":
+	            return "水曜日";
+	        case "Thursday":
+	            return "木曜日";
+	        case "Friday":
+	            return "金曜日";
+	        case "Saturday":
+	            return "土曜日";
+	        case "Sunday":
+	            return "日曜日";
+	        default:
+	            return englishDay;
+	    }
+	}
+
 
 	@GetMapping
 	public String top() {
@@ -67,8 +89,11 @@ public class AdminController {
 	@GetMapping("/restaurants/{id}")
 	public String show(@PathVariable(name = "id") Integer id, Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
+		
+	    String japaneseClosingDay = convertDayToJapanese(restaurant.getClosingDay());
 
 		model.addAttribute("restaurant", restaurant);
+		 model.addAttribute("japaneseClosingDay", japaneseClosingDay); // 日本語の曜日を追加
 
 		return "admin/restaurants/show";
 	}

@@ -81,17 +81,47 @@
 										rows="5"></textarea>
 								</div>
 							</div>
-							
+
+							<!-- 開店時間 -->
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
-									<label for="openTime" class="col-form-label text-md-left fw-bold">営業時間</label>
+									<label for="openTimeStart" class="col-form-label text-md-left fw-bold">開店時間</label>
 								</div>
 								<div class="col-md-8">
-									<div th:if="${#fields.hasErrors('openTime')}" class="text-danger small mb-2"
-										th:errors="*{openTime}"></div>
-									<input type="text" class="form-control" th:field="*{openTime}">
+									<input type="time" id="openTimeStart" class="form-control" required>
 								</div>
 							</div>
+
+							<!-- 閉店時間 -->
+							<div class="form-group row mb-3">
+								<div class="col-md-4">
+									<label for="openTimeEnd" class="col-form-label text-md-left fw-bold">閉店時間</label>
+								</div>
+								<div class="col-md-8">
+									<input type="time" id="openTimeEnd" class="form-control" required>
+								</div>
+							</div>
+
+							<!-- 隠しフィールドで '09:00-23:00' の形式を保持 -->
+							<input type="hidden" id="openTime" name="openTime" th:field="*{openTime}">
+
+							<script>
+								document.addEventListener("DOMContentLoaded", function () {
+									const openTimeStart = document.getElementById('openTimeStart');
+									const openTimeEnd = document.getElementById('openTimeEnd');
+									const openTime = document.getElementById('openTime');
+
+									function updateOpenTime() {
+										if (openTimeStart.value && openTimeEnd.value) {
+											openTime.value = `${openTimeStart.value}-${openTimeEnd.value}`;
+										}
+									}
+
+									openTimeStart.addEventListener('change', updateOpenTime);
+									openTimeEnd.addEventListener('change', updateOpenTime);
+								});
+							</script>
+
 
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
@@ -136,23 +166,31 @@
 									<input type="text" class="form-control" th:field="*{phoneNumber}">
 								</div>
 							</div>
-							
+
 							<div class="form-group row mb-3">
 								<div class="col-md-4">
 									<label for="closingDay" class="col-form-label text-md-left fw-bold">定休日</label>
 								</div>
 								<div class="col-md-8">
-									<div th:if="${#fields.hasErrors('closingDay')}" class="text-danger small mb-2"
-										th:errors="*{closingDay}"></div>
-									<input type="text" class="form-control" th:field="*{closingDay}">
+									<div class="col-md-8">
+										<select class="form-control form-select" th:field="*{closingDay}" required >
+											<option value="">選択してください</option>
+											<option value="Monday">月曜日</option>
+											<option value="Tuesday">火曜日</option>
+											<option value="Wednesday">水曜日</option>
+											<option value="Thursday">木曜日</option>
+											<option value="Friday">金曜日</option>
+											<option value="Saturday">土曜日</option>
+											<option value="Sunday">日曜日</option>
+										</select>
+									</div>
 								</div>
-							</div>
 
 
-							<div class="form-group d-flex justify-content-center my-4">
-								<button type="submit"
-									class="btn text-white shadow-sm w-50 samuraitabelog-btn">登録</button>
-							</div>
+								<div class="form-group d-flex justify-content-center my-4">
+									<button type="submit"
+										class="btn text-white shadow-sm w-50 samuraitabelog-btn">登録</button>
+								</div>
 						</form>
 					</div>
 				</div>

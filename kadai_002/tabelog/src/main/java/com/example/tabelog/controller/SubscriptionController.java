@@ -40,8 +40,7 @@ public class SubscriptionController {
 
 		// サブスクリプション作成のためのセッションID(subscriptionID)を生成
 		String subscriptionId = stripeService.createSubscription(user, httpServletRequest);
-		
-		
+
 		User dbUser = userRepository.getReferenceById(user.getId());
 		dbUser.setSubscriptionId(subscriptionId);
 		userRepository.save(dbUser);
@@ -50,7 +49,6 @@ public class SubscriptionController {
 		model.addAttribute("subscriptionId", subscriptionId);
 		return "user/subscription";
 	}
-	
 
 	@GetMapping("/subsc/user/success")
 	public String success(@RequestParam("session_id") String sessionId, RedirectAttributes redirectAttributes) {
@@ -98,15 +96,21 @@ public class SubscriptionController {
 
 	}
 
-
 	//クレジットカード編集 StripeService　createCustomerPortalSessionより
 	@GetMapping("/customer/portal")
 	public RedirectView redirectToCustomerPortal(@RequestParam("email") String email,
-			HttpServletRequest httpServletRequest) throws StripeException {
-		// 顧客のメールアドレスを使ってポータルリンクを生成
-		String portalUrl = stripeService.createCustomerPortalSession(email, httpServletRequest);
+			HttpServletRequest httpServletRequest,RedirectAttributes redirectAttributes) throws StripeException {
+		try {
+			// 顧客のメールアドレスを使ってポータルリンクを生成
+			String portalUrl = stripeService.createCustomerPortalSession(email, httpServletRequest);
 
-		// ポータルURLにリダイレクト
-		return new RedirectView(portalUrl);
+			// ポータルURLにリダイレクト
+			return new RedirectView(portalUrl);
+		} catch (IllegalArgumentException ex) {
+			ex.printStackTrace();
+			redirectAttributes.addFlashAttribute("errorMessage", "カスタマーIDが見つかりません。");
+			// Customer IDが未設定の場合、特定のURLへリダイレクト
+			return new RedirectView("/user");
+		}
 	}
 }
